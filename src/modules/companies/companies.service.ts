@@ -1,26 +1,55 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { Company } from './entities/company.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CompaniesService {
+  constructor(
+    @InjectRepository(Company)
+    private readonly companyRepository: Repository<Company>,
+  ) {}
   create(createCompanyDto: CreateCompanyDto) {
-    return 'This action adds a new company';
+    const hashPassword = createCompanyDto.passowrd;
+
+    const company = this.companyRepository.create({
+      name: CreateCompanyDto.name,
+      passowrd: hashPassword,
+    });
+    return this.companyRepository.save(company);
   }
 
   findAll() {
-    return `This action returns all companies`;
+    return this.companyRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} company`;
+  findOne(id: string) {
+    return this.companyRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateCompanyDto: UpdateCompanyDto) {
-    return `This action updates a #${id} company`;
+  async update(id: string, updateCompanyDto: UpdateCompanyDto) {
+    const dataCompany = { name: updateCompanyDto?.name };
+
+    if (updateCompanyDto?.passowrd) {
+      const hashPassword = updateCompanyDto.passowrd;
+      dataCompany['passowrd'] = hashPassword;
+    }
+
+    const company = await this.companyRepository.preload({
+      id,
+      ...dataCompany,
+    });
+
+    if (!company) {
+      throw new NotFoundException('company não encontrada');
+    }
+
+    return this.companyRepository.save(company);
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} company`;
   }
 }

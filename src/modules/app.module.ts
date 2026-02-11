@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { CompaniesModule } from './companies/companies.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: Boolean(process.env['DATABASE_AUTOLOADENTITIES']),
       synchronize: Boolean(process.env['DATABASE_SYNCHRONIZE']),
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
