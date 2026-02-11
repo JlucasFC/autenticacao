@@ -22,6 +22,8 @@ export class AuthService {
       email: loginDto.email,
     });
 
+    console.log(loginDto.passowrd);
+
     if (!user) throw new UnauthorizedException('E-mail ou senha invalida');
 
     const passowrdIsValid = await this.hashingService.compare(

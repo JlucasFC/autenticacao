@@ -1,4 +1,4 @@
-import { IsString, IsStrongPassword } from 'class-validator';
+import { IsEmail, IsString, IsStrongPassword } from 'class-validator';
 
 export class CreateCompanyDto {
   @IsString()
@@ -6,4 +6,7 @@ export class CreateCompanyDto {
 
   @IsStrongPassword()
   passowrd: string;
+
+  @IsEmail()
+  email: string;
 }

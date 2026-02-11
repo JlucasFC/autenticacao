@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Company } from '../companies/entities/company.entity';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
@@ -23,5 +24,6 @@ import { Company } from '../companies/entities/company.entity';
     AuthService,
   ],
   exports: [HashingService],
+  controllers: [AuthController],
 })
 export class AuthModule {}
