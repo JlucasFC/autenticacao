@@ -40,7 +40,7 @@ export class AuthService {
   async createToken(user: Company) {
     const jwtToken = this.jwtService.signAsync(
       { sub: user.id },
-      { secret: this.configService.get('JWT_SECRET') },
+      { secret: this.configService.get('JWT_SECRET'), expiresIn: 3600 },
     );
     return jwtToken;
   }
